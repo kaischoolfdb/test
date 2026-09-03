@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Explorer — Kids Psychology</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #070d1a;
+            --bg-card: rgba(15, 23, 42, 0.65);
+            --border: rgba(59, 130, 246, 0.18);
+            --border-hover: rgba(59, 130, 246, 0.4);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.35);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #1e3a5f;
+            top: -10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+
+        .bg-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #1d4ed8;
+            bottom: -10%;
+            right: -5%;
+            animation-delay: -7s;
+        }
+
+        .bg-orb-3 {
+            width: 350px;
+            height: 350px;
+            background: #2563eb;
+            top: 40%;
+            left: 60%;
+            opacity: 0.2;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* Stars */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Layout */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            display: inline-block;
+            animation: gentleBounce 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(59, 130, 246, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                        0 0 40px -10px var(--accent-glow),
+                        0 0 0 1px rgba(59, 130, 246, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Age Selection */
+        .age-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 28px;
+            color: var(--text-primary);
+        }
+
+        .age-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .age-btn {
+            aspect-ratio: 1;
+            border: 1.5px solid rgba(59, 130, 246, 0.25);
+            background: rgba(30, 58, 95, 0.4);
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .age-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-4px) scale(1.08);
+            box-shadow: 0 12px 24px -8px var(--accent-glow);
+        }
+
+        .age-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Question Card */
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .progress-container {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: rgba(30, 58, 95, 0.6);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            border-radius: 100px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .age-badge {
+            padding: 6px 16px;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: #60a5fa;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-bottom: 28px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Video Placeholder */
+        .video-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 58, 95, 0.6));
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .video-box:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 58, 95, 0.7));
+        }
+
+        .video-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+        }
+
+        .video-icon {
+            width: 72px;
+            height: 72px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .video-box:hover .video-icon {
+            background: rgba(59, 130, 246, 0.25);
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .video-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: #60a5fa;
+            margin-left: 4px;
+        }
+
+        .video-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #93c5fd;
+            position: relative;
+            z-index: 1;
+        }
+
+        .video-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Rating */
+        .rating-section {
+            margin-bottom: 28px;
+        }
+
+        .rating-label {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .rating-btn {
+            flex: 1;
+            max-width: 90px;
+            padding: 16px 8px;
+            background: transparent;
+            border: 1.5px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .rating-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateY(-6px);
+        }
+
+        .rating-btn .emoji {
+            font-size: 2.4rem;
+            filter: grayscale(100%) opacity(0.5);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .rating-btn:hover .emoji {
+            filter: grayscale(0%) opacity(1);
+            transform: scale(1.25);
+        }
+
+        .rating-btn .num {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .rating-btn:hover .num {
+            color: var(--text-secondary);
+        }
+
+        .rating-btn.selected {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 24px -8px var(--accent-glow);
+        }
+
+        .rating-btn.selected .emoji {
+            filter: grayscale(0%) opacity(1);
+            transform: scale(1.3);
+            animation: pop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rating-btn.selected .num {
+            color: #60a5fa;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1.3); }
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-back:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: translateX(-2px);
+        }
+
+        .btn-back:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            box-shadow: 0 8px 24px -8px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px -8px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-next:active {
+            transform: translateY(0);
+        }
+
+        /* Completion */
+        .completion-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 12px 32px -8px rgba(16, 185, 129, 0.4);
+            animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .completion-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .completion-title {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .completion-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .btn-restart {
+            display: block;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            padding: 16px 40px;
+            font-size: 1rem;
+            box-shadow: 0 8px 24px -8px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px -8px rgba(37, 99, 235, 0.6);
+        }
+
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 2rem; }
+            .card { padding: 28px 20px; border-radius: 22px; }
+            .age-grid { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+            .age-btn { font-size: 1.1rem; border-radius: 14px; }
+            .question-text { font-size: 1.15rem; }
+            .rating-btn .emoji { font-size: 1.8rem; }
+            .rating-options { gap: 4px; }
+            .rating-btn { padding: 12px 4px; border-radius: 14px; }
+        }
+
+        @media (max-width: 400px) {
+            .age-grid { grid-template-columns: repeat(5, 1fr); }
+            .rating-btn .emoji { font-size: 1.5rem; }
+        }
+
+        /* Page transitions */
+        .fade-enter {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Effects -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">🧠</div>
+            <h1>Mind Explorer</h1>
+            <p>A cozy space to discover how you feel</p>
+        </div>
+
+        <!-- Age Selection -->
+        <div class="card" id="ageCard">
+            <div class="age-title">How old are you?</div>
+            <div class="age-grid">
+                <button class="age-btn" onclick="selectAge(6)">6</button>
+                <button class="age-btn" onclick="selectAge(7)">7</button>
+                <button class="age-btn" onclick="selectAge(8)">8</button>
+                <button class="age-btn" onclick="selectAge(9)">9</button>
+                <button class="age-btn" onclick="selectAge(10)">10</button>
+                <button class="age-btn" onclick="selectAge(11)">11</button>
+                <button class="age-btn" onclick="selectAge(12)">12</button>
+                <button class="age-btn" onclick="selectAge(13)">13</button>
+                <button class="age-btn" onclick="selectAge(14)">14</button>
+                <button class="age-btn" onclick="selectAge(15)">15</button>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="card hidden" id="questionCard">
+            <div class="question-header">
+                <div class="progress-container">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Question 1 of 5</div>
+                </div>
+                <div class="age-badge" id="ageBadge">Age 10</div>
+            </div>
+
+            <div class="question-text" id="questionText">
+                [Your question goes here — replace this text in the questionBank below]
+            </div>
+
+            <!-- VIDEO PLACEHOLDER — Replace this entire div with your <video> tag -->
+            <div class="video-box" id="videoPlaceholder">
+                <div class="video-icon">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <div class="video-label">Insert your video here</div>
+                <div class="video-hint">Replace this box with your &lt;video&gt; tag</div>
+            </div>
+
+            <div class="rating-section">
+                <div class="rating-label">How does this make you feel?</div>
+                <div class="rating-options">
+                    <button class="rating-btn" onclick="rate(1)" data-value="1">
+                        <span class="emoji">😢</span>
+                        <span class="num">1</span>
+                    </button>
+                    <button class="rating-btn" onclick="rate(2)" data-value="2">
+                        <span class="emoji">😕</span>
+                        <span class="num">2</span>
+                    </button>
+                    <button class="rating-btn" onclick="rate(3)" data-value="3">
+                        <span class="emoji">😐</span>
+                        <span class="num">3</span>
+                    </button>
+                    <button class="rating-btn" onclick="rate(4)" data-value="4">
+                        <span class="emoji">🙂</span>
+                        <span class="num">4</span>
+                    </button>
+                    <button class="rating-btn" onclick="rate(5)" data-value="5">
+                        <span class="emoji">😄</span>
+                        <span class="num">5</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-back" id="prevBtn" onclick="prevQuestion()" disabled>← Back</button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Completion Card -->
+        <div class="card hidden" id="completionCard" style="text-align: center;">
+            <div class="completion-icon">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="completion-title">All Done! 🎉</div>
+            <div class="completion-text">
+                Thank you for sharing how you feel.<br>You did an amazing job!
+            </div>
+            <button class="btn btn-restart" onclick="restart()">Start Over</button>
+        </div>
+
+    </div>
+
+    <script>
+        /* ============================
+           CONFIGURATION — EDIT HERE
+           ============================ */
+
+        // Insert your questions here. Each age has its own array of questions.
+        const questionBank = {
+            6:  [
+                "[Age 6 — Question 1: Insert your question here]",
+                "[Age 6 — Question 2: Insert your question here]",
+                "[Age 6 — Question 3: Insert your question here]",
+                "[Age 6 — Question 4: Insert your question here]",
+                "[Age 6 — Question 5: Insert your question here]"
+            ],
+            7:  [
+                "[Age 7 — Question 1: Insert your question here]",
+                "[Age 7 — Question 2: Insert your question here]",
+                "[Age 7 — Question 3: Insert your question here]",
+                "[Age 7 — Question 4: Insert your question here]",
+                "[Age 7 — Question 5: Insert your question here]"
+            ],
+            8:  [
+                "[Age 8 — Question 1: Insert your question here]",
+                "[Age 8 — Question 2: Insert your question here]",
+                "[Age 8 — Question 3: Insert your question here]",
+                "[Age 8 — Question 4: Insert your question here]",
+                "[Age 8 — Question 5: Insert your question here]"
+            ],
+            9:  [
+                "[Age 9 — Question 1: Insert your question here]",
+                "[Age 9 — Question 2: Insert your question here]",
+                "[Age 9 — Question 3: Insert your question here]",
+                "[Age 9 — Question 4: Insert your question here]",
+                "[Age 9 — Question 5: Insert your question here]"
+            ],
+            10: [
+                "[Age 10 — Question 1: Insert your question here]",
+                "[Age 10 — Question 2: Insert your question here]",
+                "[Age 10 — Question 3: Insert your question here]",
+                "[Age 10 — Question 4: Insert your question here]",
+                "[Age 10 — Question 5: Insert your question here]"
+            ],
+            11: [
+                "[Age 11 — Question 1: Insert your question here]",
+                "[Age 11 — Question 2: Insert your question here]",
+                "[Age 11 — Question 3: Insert your question here]",
+                "[Age 11 — Question 4: Insert your question here]",
+                "[Age 11 — Question 5: Insert your question here]"
+            ],
+            12: [
+                "[Age 12 — Question 1: Insert your question here]",
+                "[Age 12 — Question 2: Insert your question here]",
+                "[Age 12 — Question 3: Insert your question here]",
+                "[Age 12 — Question 4: Insert your question here]",
+                "[Age 12 — Question 5: Insert your question here]"
+            ],
+            13: [
+                "[Age 13 — Question 1: Insert your question here]",
+                "[Age 13 — Question 2: Insert your question here]",
+                "[Age 13 — Question 3: Insert your question here]",
+                "[Age 13 — Question 4: Insert your question here]",
+                "[Age 13 — Question 5: Insert your question here]"
+            ],
+            14: [
+                "[Age 14 — Question 1: Insert your question here]",
+                "[Age 14 — Question 2: Insert your question here]",
+                "[Age 14 — Question 3: Insert your question here]",
+                "[Age 14 — Question 4: Insert your question here]",
+                "[Age 14 — Question 5: Insert your question here]"
+            ],
+            15: [
+                "[Age 15 — Question 1: Insert your question here]",
+                "[Age 15 — Question 2: Insert your question here]",
+                "[Age 15 — Question 3: Insert your question here]",
+                "[Age 15 — Question 4: Insert your question here]",
+                "[Age 15 — Question 5: Insert your question here]"
+            ]
+        };
+
+        // Number of questions per session (adjust if you add more questions per age)
+        const QUESTIONS_PER_SESSION = 5;
+
+        /* ============================
+           APP LOGIC
+           ============================ */
+
+        let currentAge = null;
+        let currentQuestion = 0;
+        let answers = [];
+
+        // Generate background stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 60; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 4 + 's';
+            star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
+            starsContainer.appendChild(star);
+        }
+
+        function selectAge(age) {
+            currentAge = age;
+            currentQuestion = 0;
+            answers = new Array(QUESTIONS_PER_SESSION).fill(null);
+
+            document.getElementById('ageCard').classList.add('hidden');
+            const qCard = document.getElementById('questionCard');
+            qCard.classList.remove('hidden');
+            qCard.classList.add('fade-enter');
+
+            document.getElementById('ageBadge').textContent = 'Age ' + age;
+            updateQuestion();
+        }
+
+        function updateQuestion() {
+            const questions = questionBank[currentAge] || questionBank[10];
+            document.getElementById('questionText').textContent = questions[currentQuestion];
+            document.getElementById('progressText').textContent = 
+                `Question ${currentQuestion + 1} of ${QUESTIONS_PER_SESSION}`;
+            document.getElementById('progressFill').style.width = 
+                `${((currentQuestion + 1) / QUESTIONS_PER_SESSION) * 100}%`;
+
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = 
+                currentQuestion === QUESTIONS_PER_SESSION - 1 ? 'Finish ✓' : 'Next →';
+
+            // Reset ratings
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Restore previous selection
+            if (answers[currentQuestion] !== null) {
+                highlightRating(answers[currentQuestion]);
+            }
+        }
+
+        function rate(value) {
+            answers[currentQuestion] = value;
+            highlightRating(value);
+
+            // Small delay then auto-advance for smooth feel
+            setTimeout(() => {
+                if (currentQuestion < QUESTIONS_PER_SESSION - 1) {
+                    nextQuestion();
+                }
+            }, 350);
+        }
+
+        function highlightRating(value) {
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                const btnVal = parseInt(btn.dataset.value);
+                if (btnVal === value) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < QUESTIONS_PER_SESSION - 1) {
+                currentQuestion++;
+                updateQuestion();
+            } else {
+                finish();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                updateQuestion();
+            }
+        }
+
+        function finish() {
+            console.log('Session complete! Age:', currentAge, 'Answers:', answers);
+            document.getElementById('questionCard').classList.add('hidden');
+            document.getElementById('completionCard').classList.remove('hidden');
+            document.getElementById('completionCard').classList.add('fade-enter');
+        }
+
+        function restart() {
+            currentAge = null;
+            currentQuestion = 0;
+            answers = [];
+
+            document.getElementById('completionCard').classList.add('hidden');
+            document.getElementById('questionCard').classList.add('hidden');
+            document.getElementById('ageCard').classList.remove('hidden');
+            document.getElementById('ageCard').classList.add('fade-enter');
+        }
+    </script>
+</body>
+</html>
